@@ -1,3 +1,15 @@
 .animalButton {
     margin: 10px;
 }
+
+.top-left {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+}
+
+.gif-container {
+    position: relative;
+    text-align: center;
+    color: white;
+}
