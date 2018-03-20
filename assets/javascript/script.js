@@ -9,15 +9,25 @@ $(document).ready(function(){
         let animalInput = $("#formField").val();
         console.log(animalInput);
         makeButton(animalInput);
+        
     });
 
     function makeButton(buttonTerm){
         console.log("it tried making a button with "+buttonTerm)
         animalArray.push(buttonTerm);
         let buttonColor = getColor();
-        let buttonToAdd = '<button class="btn waves-effect animalButton '+buttonColor+'" id="'+buttonTerm+'" animal-data="'+buttonTerm+'">'+buttonTerm+'</button>';
+        let buttonToAdd = '<button class="btn waves-effect animalButton '+buttonTerm+' '+buttonColor+'" id="'+buttonTerm+'" animal-data="'+buttonTerm+'">'+buttonTerm+'</button>';
         console.log(buttonToAdd)
         $("#buttonZone").append(buttonToAdd);
+        
+        let buttonTermClass = '.'+buttonTerm
+
+        $(buttonTermClass).on("click", function(){
+            console.log(this);
+            
+            makeCall($(this).attr("animal-data"))
+        });
+        
     }
 
     function makeCall(animalName){
@@ -31,17 +41,36 @@ $(document).ready(function(){
 
             for (let i=0;i<response.data.length;i++){
                 console.log(i);
-                let gifDiv = $("<div class='col s4'>");
+                let gifDiv = $("<div class='col s4 animalGif'>");
                 let animalGif = $("<img>");
-                animalGif.attr("src",response.data[i].images.fixed_height.url);
+                let animURL = (response.data[i].images.fixed_height.url);
+                let stillURL = (response.data[i].images.fixed_height_still.url);
                 let ratingTag = $("<p>Rated: "+response.data[i].rating+"</p>");
+
+                animalGif.attr("src",response.data[i].images.fixed_height_still.url);
+                animalGif.attr("animURL",animURL);
+                animalGif.attr("stillURL",stillURL);
+                animalGif.attr("animState","still")
+                
                 gifDiv.append(animalGif);
                 gifDiv.append(ratingTag);
                 $("#gifZone").prepend(gifDiv);
                 
             }
+            $("img").on("click",function(){
+                console.log($(this).attr("animState"))
+                if($(this).attr("animState")==="still"){
+                    $(this).attr("animState","animated");
+                    $(this).attr("src",$(this).attr("animURL"));
+                } else {
+                    $(this).attr("animState","still");
+                    $(this).attr("src",$(this).attr("stillURL"));
+                }
+            })
         });
     }
+
+    
 
 
 
@@ -57,13 +86,13 @@ $(document).ready(function(){
 
     animalArray.forEach(function(element){
         makeButton(element);
+
+        
     });
 
-    $("button").on("click", function(){
-        console.log(this);
-        
-        makeCall($(this).attr("animal-data"))
-    });
+    
+
+    
 
 
 
