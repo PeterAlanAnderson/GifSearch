@@ -7,6 +7,7 @@ $(document).ready(function(){
 
     $("#submitButton").on("click", function(){
         let animalInput = $("#formField").val();
+        $("#formField").val("")
         console.log(animalInput);
         makeButton(animalInput);
         
